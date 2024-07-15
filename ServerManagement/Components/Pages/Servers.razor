@@ -1,6 +1,21 @@
 ﻿@page "/servers"
 
+<h1>Servers</h1>
 
-@code {
+<ul>
+	@foreach(var server in servers)
+	{
+		<li>
+			@server.ServerName in @server.ServerCity is
+			<span style="color:@(server.IsOnline?"Green" : "Red")">
+				@(server.IsOnline ? "Online" : "Offline")
+			</span>
+		</li>
+	}
+</ul>
 
+
+@code
+{
+	private List<Server> servers = ServerRepository.GetServersByCity("Toronto");
 }

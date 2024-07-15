@@ -3,7 +3,7 @@
 public class Server
 {
 
-	public Server(int? id, string? name, string? city, bool? isOnline = true)
+	public Server(int? id, string? name, string? city, bool isOnline = true)
 	{
 		ServerId = id;
 		ServerName = name;
@@ -21,5 +21,5 @@ public class Server
 	public int? ServerId { get; set; }
 	public string? ServerName { get; set; }
 	public string? ServerCity {  get; set; }	
-	public bool? IsOnline { get; set; }
+	public bool IsOnline { get; set; }
 }

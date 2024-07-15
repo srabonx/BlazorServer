@@ -75,6 +75,4 @@ public static class ServerRepository
 		return servers;
 	}
 
-
-
 }
