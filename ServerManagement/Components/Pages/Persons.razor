@@ -1,0 +1,74 @@
+﻿@page "/Persons"
+@attribute [StreamRendering]
+
+<PageTitle>Persons</PageTitle>
+
+<h1>Persons</h1>
+
+<p>Implementing a custom page to understand Blazor interactivity</p>
+
+@if(persons == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Roll</th>
+				<th>Dept</th>
+				<th>Blood Group</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			@foreach(var person in persons)
+			{
+				<tr>
+					<td>@person.m_name</td>
+					<td>@person.m_roll</td>
+					<td>@person.m_dept</td>
+					<td>@person.m_bloodGroup</td>
+				</tr>
+			}
+		</tbody>
+
+	</table>
+}
+
+@code
+{
+	private PersonData[]? persons;
+
+	protected override async Task OnInitializedAsync()
+	{
+		// Simulate asynchronous loading to simulate stream rendering
+		await Task.Delay(500);
+
+		var names = new[] { "Bijoy", "Emon", "Srabon", "Tanvir", "Kawser" };
+		var dept = "CSE";
+		var rolls = new[] { 2101006, 2101039, 2101050, 2101016, 2101020 };
+		var bloodGroups = new[] { "A+", "A+", "A+", "O+", "AB-" };
+
+		persons = Enumerable.Range(0, names.Length).Select(index => new PersonData
+			{
+				m_name = names[index],
+				m_dept = dept,
+				m_roll = rolls[index],
+				m_bloodGroup = bloodGroups[index]
+			}).ToArray();
+
+	}
+
+
+	private class PersonData
+	{
+		public string? m_name { get; set; }
+		public string? m_dept { get; set; }
+		public int?	   m_roll{ get; set; }
+		public string? m_bloodGroup{ get; set; }
+	}
+
+}
