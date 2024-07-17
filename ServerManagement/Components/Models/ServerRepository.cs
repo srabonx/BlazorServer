@@ -4,20 +4,20 @@ public static class ServerRepository
 {
 	private static List<Server> m_servers = new List<Server>()
 	{
-		new Server(id:1, name :"Server1",city: "Toronto"),
-		new Server(id:2, name :"Server2", city: "Toronto"),
-		new Server(id:3, name:"Server3", city:"Toronto"),
-		new Server(id:4, name:"Server4", city: "New York"),
-		new Server(id:5, name:"Server5", city: "London"),
-		new Server(id:6, name:"Server6", city:"Dubai"),
-		new Server(id:7, name:"Server7", city:"Dubai"),
-		new Server(id:8, name:"Server8", city:"Dhaka"),
-		new Server(id:9, name:"Server9", city:"Dhaka"),
-		new Server(id:10, name:"Server10", city:"Noakhali"),
-		new Server(id:11, name:"Server11", city:"Borishal"),
-		new Server(id:12, name:"Server12", city:"Borishal"),
-		new Server(id:13, name:"Server13", city:"Vegas"),
-		new Server(id:14, name:"Server14", city:"California")
+		new Server {ServerId = 1, ServerName = "Server1", ServerCity = "Toronto" },
+		new Server{ ServerId = 2, ServerName = "Server2", ServerCity = "Toronto" },
+		new Server{ ServerId = 3, ServerName = "Server3", ServerCity = "Toronto" },
+		new Server{ ServerId = 4, ServerName = "Server4", ServerCity = "New York" },
+		new Server{ ServerId = 5, ServerName = "Server5", ServerCity = "London" },
+		new Server{ ServerId = 6, ServerName = "Server6", ServerCity = "Dubai" },
+		new Server{ ServerId = 7, ServerName = "Server7", ServerCity = "Dubai" },
+		new Server{ ServerId = 8, ServerName = "Server8", ServerCity = "Dhaka" },
+		new Server{ ServerId = 9, ServerName = "Server9", ServerCity = "Dhaka" },
+		new Server{ ServerId = 10, ServerName = "Server10", ServerCity = "Noakhali" },
+		new Server{ ServerId = 11, ServerName = "Server11", ServerCity = "Borishal" },
+		new Server{ ServerId = 12, ServerName = "Server12", ServerCity = "Borishal" },
+		new Server{ ServerId = 13, ServerName = "Server13", ServerCity = "Vegas" },
+		new Server{ ServerId = 14, ServerName = "Server14", ServerCity = "California" }
 	};
 
 	public static void AddServer(Server server)
@@ -40,7 +40,13 @@ public static class ServerRepository
 		var server = m_servers.FirstOrDefault(s => s.ServerId == id);
 
 		if (server != null)
-			return new Server(server);
+			return new Server
+			{
+				ServerId = server.ServerId,
+				ServerName = server.ServerName,
+				ServerCity = server.ServerCity,
+				IsOnline = server.IsOnline 
+			};
 
 		return null;
 	}

@@ -10,7 +10,11 @@
 
 @if (server != null)
 {
-	<EditForm Model="server">
+	<EditForm Model="server" FormName="submitForm" OnValidSubmit="OnSubmit">
+
+		<DataAnnotationsValidator></DataAnnotationsValidator>
+
+		<InputNumber @bind-Value="server.ServerId" hidden></InputNumber>
 
 		<div class="row mb-3">
 			<div class="col-2">
@@ -18,6 +22,9 @@
 			</div>
 			<div class="col-6">
 				<InputText @bind-Value="server.ServerName" class="form-control"></InputText>
+			</div>
+			<div class="col">
+				<ValidationMessage For="() => server.ServerName"></ValidationMessage>
 			</div>
 		</div>
 
@@ -27,6 +34,9 @@
 			</div>
 			<div class="col-6">
 				<InputText @bind-Value="server.ServerCity" class="form-control"></InputText>
+			</div>
+			<div class="col">
+				<ValidationMessage For="() => server.ServerCity"></ValidationMessage>
 			</div>
 		</div>
 
@@ -39,23 +49,35 @@
 			</div>
 		</div>
 		
-		
-		
+		<br/>
+
+		<button class="btn btn-primary" type="submit">Update</button>
+		&nbsp;
+		<a href="/servers" class="btn btn-primary">Close</a>
+
 	</EditForm>
 }
 
 <br/>
 
-<a href="/servers" class="btn btn-primary">Close</a>
 
 @code {
 	[Parameter]
 	public int Id { get; set; }
 
-	Server? server;
+	[SupplyParameterFromForm]
+	Server? server { get; set; }
 
 	protected override void OnParametersSet()
 	{
-		server = ServerRepository.GetServerById(this.Id);
+		server ??= ServerRepository.GetServerById(this.Id);
+	}
+
+	private void OnSubmit()
+	{
+		if(server != null)
+		{
+			ServerRepository.UpdateServer(server.ServerId, server);
+		}
 	}
 }
