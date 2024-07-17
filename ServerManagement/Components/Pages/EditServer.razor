@@ -1,10 +1,61 @@
-﻿@page "/servers/edit"
+﻿@page "/servers/edit/{id:int}"
 
 
 <title>Edit-Server</title>
 
 <h3>Edit Server</h3>
 
-@code {
+<br/>
+<br/>
 
+@if (server != null)
+{
+	<EditForm Model="server">
+
+		<div class="row mb-3">
+			<div class="col-2">
+				<label class="col-form-label">Name</label>
+			</div>
+			<div class="col-6">
+				<InputText @bind-Value="server.ServerName" class="form-control"></InputText>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-2">
+				<label class="col-form-label">City</label>
+			</div>
+			<div class="col-6">
+				<InputText @bind-Value="server.ServerCity" class="form-control"></InputText>
+			</div>
+		</div>
+
+		<div class="row mb-3">
+			<div class="col-2">
+				<label class="col-form-label">Online</label>
+			</div>
+			<div class="col-6">
+				<InputCheckbox @bind-Value="server.IsOnline" class="form-check-input"></InputCheckbox>
+			</div>
+		</div>
+		
+		
+		
+	</EditForm>
+}
+
+<br/>
+
+<a href="/servers" class="btn btn-primary">Close</a>
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	Server? server;
+
+	protected override void OnParametersSet()
+	{
+		server = ServerRepository.GetServerById(this.Id);
+	}
 }

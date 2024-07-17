@@ -27,11 +27,12 @@
 		@foreach (var server in servers)
 		{
 			<li>
+				@{server.IsOnline = new Random().Next(0, 2) == 0;}
 				@server.ServerName in @server.ServerCity is
 				<span style="color:@(server.IsOnline?"Green" : "Red")">
 					@(server.IsOnline ? "Online" : "Offline")
 				</span>
-				<a href="/servers/edit" class="btn btn-link">Edit</a>
+				<a href="/servers/edit/@server.ServerId" class="btn btn-link">Edit</a>
 			</li>
 		}
 	</ul>
