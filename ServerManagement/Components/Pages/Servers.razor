@@ -1,5 +1,7 @@
 ﻿@page "/servers"
 
+<title>Servers</title>
+
 <h1>Servers</h1>
 
 <div class="container-fluid text-center">
@@ -33,9 +35,21 @@
 					@(server.IsOnline ? "Online" : "Offline")
 				</span>
 				<a href="/servers/edit/@server.ServerId" class="btn btn-link">Edit</a>
+
+				<EditForm
+					Model="server"
+					FormName="@($"form-delete-{server.ServerId}")"
+					OnValidSubmit="@(() => {DeleteServer(server.ServerId);})">
+					<button class="btn btn-primary m-2" type="submit">Delete</button>
+				</EditForm>
+
 			</li>
 		}
 	</ul>
+
+	<p>
+		<a href="servers/add" class="btn btn-primary">Add Server</a>
+	</p>
 </div>
 
 
@@ -43,4 +57,10 @@
 {
 	private List<Server> servers = ServerRepository.GetServers();
 	private List<string> cities = CityRepository.GetCities();
+
+	private void DeleteServer(int serverId)
+	{
+		if (serverId > 0)
+			ServerRepository.DeleteServer(serverId);
+	}
 }
