@@ -24,43 +24,71 @@
 
 <br/>
 
+<div>
+	<ServerComponent></ServerComponent>
+</div>
+
 <div class="container-fluid">
-	<ul>
-		@foreach (var server in servers)
-		{
-			<li>
-				@{server.IsOnline = new Random().Next(0, 2) == 0;}
-				@server.ServerName in @server.ServerCity is
-				<span style="color:@(server.IsOnline?"Green" : "Red")">
-					@(server.IsOnline ? "Online" : "Offline")
-				</span>
-				<a href="/servers/edit/@server.ServerId" class="btn btn-link">Edit</a>
+	<div class="row border p-2">
+		<!--Renders servers-->
+		<div class="col-6">
+			<ul>
+				@foreach (var server in servers)
+				{
+					<li>
+						@server.ServerName in @server.ServerCity is
+						<span style="color:@(server.IsOnline?"Green" : "Red")">
+							@(server.IsOnline ? "Online" : "Offline")
+						</span>
+						<a href="/servers/edit/@server.ServerId" class="btn btn-link">Edit</a>
 
-				<EditForm
-					Model="server"
-					FormName="@($"form-delete-{server.ServerId}")"
-					OnValidSubmit="@(() => {DeleteServer(server.ServerId);})">
-					<button class="btn btn-primary m-2" type="submit">Delete</button>
-				</EditForm>
+						<EditForm
+							Enhance = "true"
+							Model="server"
+							FormName="@($"form-delete-{server.ServerId}")"
+							OnValidSubmit="@(() => {DeleteServer(server.ServerId);})">
+							<button class="btn btn-primary m-2" type="submit">Delete</button>
+						</EditForm>
 
-			</li>
-		}
-	</ul>
+					</li>
+				}
+			</ul>
 
-	<p>
-		<a href="servers/add" class="btn btn-primary">Add Server</a>
-	</p>
+			<p>
+				<NavLink class="nav-link" href="servers/add">
+					<button class="btn btn-primary">Add Server</button>
+				</NavLink>
+			</p>
+		</div>
+
+		<div class="col-6">
+			<EditForm Model="servers" Enhance = "true" FormName="filterForm" OnSubmit="OnFilterUpdate">
+				<label>Filter by City</label>
+				<InputText @bind-Value="filterData" class="form-control"></InputText>
+				<button class="btn btn-primary m-2" type="submit">Filter</button>
+			</EditForm>
+		</div>
+	</div>
 </div>
 
 
 @code
 {
-	private List<Server> servers = ServerRepository.GetServers();
+	private List<Server> servers { get; set; } = ServerRepository.GetServers();
 	private List<string> cities = CityRepository.GetCities();
+
+	[SupplyParameterFromForm]
+	private string? filterData { get; set; }
 
 	private void DeleteServer(int serverId)
 	{
 		if (serverId > 0)
 			ServerRepository.DeleteServer(serverId);
+	}
+
+	private void OnFilterUpdate()
+	{
+		if (filterData != null && filterData != "")
+			servers = ServerRepository.GetServersByCity(filterData);
 	}
 }

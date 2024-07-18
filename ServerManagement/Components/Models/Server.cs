@@ -6,8 +6,9 @@ public class Server
 {
 
 	public Server()
-	{ 
-	
+	{
+		Random random = new Random();
+		IsOnline = random.Next(0, 2) != 0;
 	}
 
 	public int ServerId { get; set; }
