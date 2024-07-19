@@ -1,4 +1,5 @@
 ﻿@page "/servers"
+@rendermode InteractiveServer
 
 <title>Servers</title>
 
@@ -9,10 +10,10 @@
 		@foreach (var city in cities)
 		{
 			<div class="col">
-				<div class="card m-3 align-content-center">
+				<div class="card m-3 align-content-center @(city.Equals(filterCity,StringComparison.OrdinalIgnoreCase)?"border-primary":"")">
 					<img src="@($"/images/{city}.png")" class="card-img-top" alt="...">
 					<div class="card-body">
-						<button type="button" class="btn btn-primary">
+						<button type="button" class="btn btn-primary" @onclick = "@(() => {OnFilterCity(city);})">
 							@city
 						</button>
 					</div>
@@ -31,27 +32,24 @@
 <div class="container-fluid">
 	<div class="row border p-2">
 		<!--Renders servers-->
-		<div class="col-6">
+		<div class="col-8">
 			<ul>
-				@foreach (var server in servers)
-				{
-					<li>
-						@server.ServerName in @server.ServerCity is
-						<span style="color:@(server.IsOnline?"Green" : "Red")">
-							@(server.IsOnline ? "Online" : "Offline")
-						</span>
-						<a href="/servers/edit/@server.ServerId" class="btn btn-link">Edit</a>
-
-						<EditForm
-							Enhance = "true"
-							Model="server"
-							FormName="@($"form-delete-{server.ServerId}")"
-							OnValidSubmit="@(() => {DeleteServer(server.ServerId);})">
-							<button class="btn btn-primary m-2" type="submit">Delete</button>
-						</EditForm>
-
+				<Virtualize Items="servers" Context="server">
+					<li @key="server.ServerId">
+						<div class="row">
+							<div class="col-8">
+								@server.ServerName in @server.ServerCity is
+								<span style="color:@(server.IsOnline?"Green" : "Red")">
+									@(server.IsOnline ? "Online" : "Offline")
+								</span>
+								<a href="/servers/edit/@server.ServerId" class="btn btn-link">Edit</a>
+							</div>
+							<div class="col-4 text-center">
+								<button class="btn btn-primary m-2" type="submit" @onclick="@(() => {DeleteServer(server.ServerId);})">Delete</button>
+							</div>
+						</div>
 					</li>
-				}
+				</Virtualize>
 			</ul>
 
 			<p>
@@ -61,13 +59,13 @@
 			</p>
 		</div>
 
-		<div class="col-6">
-			<EditForm Model="servers" Enhance = "true" FormName="filterForm" OnSubmit="OnFilterUpdate">
-				<label>Filter by City</label>
-				<InputText @bind-Value="filterData" class="form-control"></InputText>
-				<button class="btn btn-primary m-2" type="submit">Filter</button>
-			</EditForm>
+		<div class="col-4">
+			<div class="input-group" >
+				<input type ="text" class="form-control" placeholder="Search Servers" @bind-value ="filterServer" @bind-value:event="oninput"/>
+				<button type="button" class="btn btn-outline-primary" id="filter-button" @onclick="HandleSearch">Search</button>
+			</div>
 		</div>
+
 	</div>
 </div>
 
@@ -77,18 +75,39 @@
 	private List<Server> servers { get; set; } = ServerRepository.GetServers();
 	private List<string> cities = CityRepository.GetCities();
 
-	[SupplyParameterFromForm]
-	private string? filterData { get; set; }
+	private string filterCity { get; set; } = string.Empty;
+
+	private string _filterServer = string.Empty;
+
+	private string filterServer { get => _filterServer;
+		set
+		{
+			_filterServer = value;
+
+			//Do something else
+			HandleSearch();
+		}
+	}
 
 	private void DeleteServer(int serverId)
 	{
 		if (serverId > 0)
+		{
 			ServerRepository.DeleteServer(serverId);
+		}
 	}
 
-	private void OnFilterUpdate()
+	private void OnFilterCity(string city)
 	{
-		if (filterData != null && filterData != "")
-			servers = ServerRepository.GetServersByCity(filterData);
+		filterCity = city;
+		servers = ServerRepository.GetServersByCity(filterCity);
 	}
+
+	private void HandleSearch()
+	{
+		servers = ServerRepository.SearchServer(_filterServer);
+
+		filterCity = string.Empty;
+	}
+
 }

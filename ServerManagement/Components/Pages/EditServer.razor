@@ -1,5 +1,7 @@
 ﻿@page "/servers/edit/{id:int}"
 
+@rendermode InteractiveServer
+
 @inject NavigationManager NavigationManager
 
 <title>Edit-Server</title>
@@ -11,7 +13,7 @@
 
 @if (server != null)
 {
-	<EditForm Model="server" FormName="submitForm" OnValidSubmit="OnSubmit">
+	<EditForm Model="server" OnValidSubmit="OnSubmit">
 
 		<DataAnnotationsValidator></DataAnnotationsValidator>
 
@@ -66,7 +68,6 @@
 	[Parameter]
 	public int Id { get; set; }
 
-	[SupplyParameterFromForm]
 	Server? server { get; set; }
 
 	protected override void OnParametersSet()

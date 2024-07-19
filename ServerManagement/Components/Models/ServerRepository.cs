@@ -7,17 +7,17 @@ public static class ServerRepository
 		new Server {ServerId = 1, ServerName = "Server1", ServerCity = "Toronto" },
 		new Server{ ServerId = 2, ServerName = "Server2", ServerCity = "Toronto" },
 		new Server{ ServerId = 3, ServerName = "Server3", ServerCity = "Toronto" },
-		new Server{ ServerId = 4, ServerName = "Server4", ServerCity = "New York" },
-		new Server{ ServerId = 5, ServerName = "Server5", ServerCity = "London" },
-		new Server{ ServerId = 6, ServerName = "Server6", ServerCity = "Dubai" },
-		new Server{ ServerId = 7, ServerName = "Server7", ServerCity = "Dubai" },
-		new Server{ ServerId = 8, ServerName = "Server8", ServerCity = "Dhaka" },
-		new Server{ ServerId = 9, ServerName = "Server9", ServerCity = "Dhaka" },
-		new Server{ ServerId = 10, ServerName = "Server10", ServerCity = "Noakhali" },
-		new Server{ ServerId = 11, ServerName = "Server11", ServerCity = "Borishal" },
-		new Server{ ServerId = 12, ServerName = "Server12", ServerCity = "Borishal" },
-		new Server{ ServerId = 13, ServerName = "Server13", ServerCity = "Vegas" },
-		new Server{ ServerId = 14, ServerName = "Server14", ServerCity = "California" }
+		new Server{ ServerId = 4, ServerName = "Server4", ServerCity = "Montreal" },
+		new Server{ ServerId = 5, ServerName = "Server5", ServerCity = "Montreal" },
+		new Server{ ServerId = 6, ServerName = "Server6", ServerCity = "Montreal" },
+		new Server{ ServerId = 7, ServerName = "Server7", ServerCity = "Halifax" },
+		new Server{ ServerId = 8, ServerName = "Server8", ServerCity = "Halifax" },
+		new Server{ ServerId = 9, ServerName = "Server9", ServerCity = "Halifax" },
+		new Server{ ServerId = 10, ServerName = "Server10", ServerCity = "Calgary" },
+		new Server{ ServerId = 11, ServerName = "Server11", ServerCity = "Calgary" },
+		new Server{ ServerId = 12, ServerName = "Server12", ServerCity = "Ottawa" },
+		new Server{ ServerId = 13, ServerName = "Server13", ServerCity = "Ottawa" },
+		new Server{ ServerId = 14, ServerName = "Server14", ServerCity = "Ottawa" }
 	};
 
 	public static void AddServer(Server server)
