@@ -5,66 +5,18 @@
 
 <h1>Servers</h1>
 
-<div class="container-fluid text-center">
-	<div class="row align-content-center" >
-		@foreach (var city in cities)
-		{
-			<div class="col">
-				<div class="card m-3 align-content-center @(city.Equals(filterCity,StringComparison.OrdinalIgnoreCase)?"border-primary":"")">
-					<img src="@($"/images/{city}.png")" class="card-img-top" alt="...">
-					<div class="card-body">
-						<button type="button" class="btn btn-primary" @onclick = "@(() => {OnFilterCity(city);})">
-							@city
-						</button>
-					</div>
-				</div> 
-			</div>
-		}
-	</div>
-</div>
+<CityListComponent @ref="cityListComponent" HandleFilterCityCallback="HandleFilterCity"></CityListComponent>
 
 <br/>
 
-<div>
-	<ServerComponent></ServerComponent>
-</div>
 
 <div class="container-fluid">
 	<div class="row border p-2">
 		<!--Renders servers-->
-		<div class="col-8">
-			<ul>
-				<Virtualize Items="servers" Context="server">
-					<li @key="server.ServerId">
-						<div class="row">
-							<div class="col-8">
-								@server.ServerName in @server.ServerCity is
-								<span style="color:@(server.IsOnline?"Green" : "Red")">
-									@(server.IsOnline ? "Online" : "Offline")
-								</span>
-								<a href="/servers/edit/@server.ServerId" class="btn btn-link">Edit</a>
-							</div>
-							<div class="col-4 text-center">
-								<button class="btn btn-primary m-2" type="submit" @onclick="@(() => {DeleteServer(server.ServerId);})">Delete</button>
-							</div>
-						</div>
-					</li>
-				</Virtualize>
-			</ul>
-
-			<p>
-				<NavLink class="nav-link" href="servers/add">
-					<button class="btn btn-primary">Add Server</button>
-				</NavLink>
-			</p>
-		</div>
-
-		<div class="col-4">
-			<div class="input-group" >
-				<input type ="text" class="form-control" placeholder="Search Servers" @bind-value ="filterServer" @bind-value:event="oninput"/>
-				<button type="button" class="btn btn-outline-primary" id="filter-button" @onclick="HandleSearch">Search</button>
-			</div>
-		</div>
+		
+		<ServerListComponent servers="servers"></ServerListComponent>
+		
+		<SearchComponent @ref="searchComponent" servers="servers" HandleSearchCallback="HandleSearch"></SearchComponent>
 
 	</div>
 </div>
@@ -73,41 +25,22 @@
 @code
 {
 	private List<Server> servers { get; set; } = ServerRepository.GetServers();
-	private List<string> cities = CityRepository.GetCities();
 
-	private string filterCity { get; set; } = string.Empty;
+	private CityListComponent? cityListComponent;
 
-	private string _filterServer = string.Empty;
+	private SearchComponent? searchComponent;
 
-	private string filterServer { get => _filterServer;
-		set
-		{
-			_filterServer = value;
+	private void HandleSearch(List<Server> servers)
+	{
+		this.servers = servers;
 
-			//Do something else
-			HandleSearch();
-		}
+		cityListComponent?.ClearFilter();
 	}
 
-	private void DeleteServer(int serverId)
+	private void HandleFilterCity(string city)
 	{
-		if (serverId > 0)
-		{
-			ServerRepository.DeleteServer(serverId);
-		}
-	}
-
-	private void OnFilterCity(string city)
-	{
-		filterCity = city;
-		servers = ServerRepository.GetServersByCity(filterCity);
-	}
-
-	private void HandleSearch()
-	{
-		servers = ServerRepository.SearchServer(_filterServer);
-
-		filterCity = string.Empty;
+		this.servers = ServerRepository.GetServersByCity(city);
+		searchComponent?.ClearFilter();
 	}
 
 }

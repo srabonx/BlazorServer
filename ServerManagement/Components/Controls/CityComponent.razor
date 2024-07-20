@@ -1,0 +1,29 @@
+﻿
+
+<div class="col">
+	<div class="card m-3 align-content-center @(City.Equals(FilterCity,StringComparison.OrdinalIgnoreCase)?"border-primary":"")">
+		<img src="@($"/images/{City}.png")" class="card-img-top" alt="...">
+		<div class="card-body">
+			<button type="button" class="btn btn-primary" @onclick="@(() => {OnSelectCity(City);})">
+				@City
+			</button>
+		</div>
+	</div>
+</div>
+
+@code {
+
+	[Parameter]
+	public string City{ get; set; }
+	[Parameter]
+	public string FilterCity { get; set; }
+
+
+	[Parameter]
+	public EventCallback<string> HandleSelectCityCallback { get; set; }
+
+	private void OnSelectCity(string city)
+	{
+		HandleSelectCityCallback.InvokeAsync(city);
+	}
+}

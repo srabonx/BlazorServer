@@ -1,5 +1,31 @@
-﻿<h3>ServerComponent</h3>
+﻿
+@inject NavigationManager NavMan
+
+<li @key="server.ServerId">
+	<div class="row">
+		<div class="col-8">
+			@server.ServerName in @server.ServerCity is
+			<span style="color:@(server.IsOnline?"Green" : "Red")">
+				@(server.IsOnline ? "Online" : "Offline")
+			</span>
+			<a href="/servers/edit/@server.ServerId" class="btn btn-link">Edit</a>
+		</div>
+		<div class="col-4 text-center">
+			<button class="btn btn-primary m-2" type="submit" @onclick="@(() => {DeleteServer(server.ServerId);})">Delete</button>
+		</div>
+	</div>
+</li>
+
 
 @code {
+	[Parameter]
+	public Server? server{ get; set; }
 
+	[Parameter]
+	public EventCallback<int> DeleteServerCallback{ get; set; }
+
+	private void DeleteServer(int serverId)
+	{
+		DeleteServerCallback.InvokeAsync(serverId);
+	}
 }

@@ -1,0 +1,45 @@
+﻿
+
+<div class="col-4">
+	<div class="input-group">
+		<input type="text" class="form-control" placeholder="Search Servers" @bind-value="filterServer" @bind-value:event="oninput" />
+		<button type="button" class="btn btn-outline-primary" id="filter-button" @onclick="HandleSearch">Search</button>
+	</div>
+</div>
+
+
+@code {
+
+	[Parameter]
+	public List<Server>? servers { get; set; }
+
+	private string _filterServer = string.Empty;
+
+	public void ClearFilter()
+	{
+		_filterServer = string.Empty;
+	}
+
+	private string filterServer
+	{
+		get => _filterServer;
+		set
+		{
+			_filterServer = value;
+
+			//Do something else
+			HandleSearch();
+		}
+	}
+
+	[Parameter]
+	public EventCallback<List<Server>> HandleSearchCallback{ get; set; }
+
+	private void HandleSearch()
+	{
+		servers = ServerRepository.SearchServer(_filterServer);
+
+		HandleSearchCallback.InvokeAsync(servers);
+	}
+
+}

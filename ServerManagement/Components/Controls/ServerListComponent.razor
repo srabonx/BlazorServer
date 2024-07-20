@@ -1,0 +1,35 @@
+﻿
+
+
+
+	<div class="col-8">
+		<ul>
+			<Virtualize Items="servers" Context="server">
+
+				<ServerComponent server="server" DeleteServerCallback="DeleteServer"></ServerComponent>
+
+			</Virtualize>
+		</ul>
+
+		<p>
+			<NavLink class="nav-link" href="servers/add">
+				<button class="btn btn-primary">Add Server</button>
+			</NavLink>
+		</p>
+	</div>
+
+
+
+@code {
+
+	[Parameter]
+	public List<Server>? servers{ get; set; }
+
+	private void DeleteServer(int serverId)
+	{
+		if (serverId > 0)
+		{
+			ServerRepository.DeleteServer(serverId);
+		}
+	}
+}

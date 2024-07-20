@@ -1,0 +1,77 @@
+﻿@page "/todo"
+@rendermode InteractiveServer
+
+<h3>ToDo</h3>
+
+<button class="btn btn-primary"
+		type="button"
+		@onclick="AddTask">
+		Add Task
+</button>
+
+<br/>
+<br/>
+
+@if(Items != null && Items.Count > 0)
+{
+	<ul class="list-unstyled">
+		@foreach(var item in Items)
+		{
+			<li @key="item.Id">
+				<div class="row mb-2">
+					<div class="col-1" style="width:30px">
+						<input  type="checkbox"
+								class="form-check-input"
+								@bind-value="item.IsCompleted"
+								@onclick="@(()=>{OnCompleted(item);})"
+								checked="@item.IsCompleted"
+								style="vertical-align:middle"/>
+					</div>
+					<div class="col">
+						@if(item.IsCompleted)
+						{
+							<input type="text"
+								   class="form-control border-0 text-decoration-line-through"
+								   @bind-value="item.Description"
+								   style="vertical-align:middle"
+								   disabled/>
+						}
+						else
+						{
+							<input type="text"
+								   class="form-control border-0"
+								   @bind-value="item.Description"
+								   style="vertical-align:middle" />
+						}
+					
+					</div>
+					<div class="col-4">
+						@if(item.IsCompleted)
+						{
+							<p style="vertical-align:middle">Completed at: @item.CompletedTime.ToString()</p>
+						}
+					</div>
+				</div>
+			</li>
+		}
+	</ul>
+}
+
+
+@code {
+
+	private List<ToDoItem> Items = ToDoItemRepository.GetItems();
+
+	private void AddTask()
+	{
+		ToDoItemRepository.AddItem(new ToDoItem { Description = "New Task", IsCompleted = false });
+
+		Items = ToDoItemRepository.GetItems();
+	}
+
+	private void OnCompleted(ToDoItem item)
+	{
+		item.CompletedTime = DateTime.Now.ToLocalTime();
+	}
+
+}
