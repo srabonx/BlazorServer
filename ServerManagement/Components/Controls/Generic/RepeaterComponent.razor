@@ -1,0 +1,28 @@
+﻿@typeparam TData
+
+@Header
+
+@if(Items != null && Items.Count > 0 && Row != null)
+{
+	<Virtualize Items="Items" Context="Item">
+		@Row(Item)
+	</Virtualize>
+}
+
+@Footer
+
+@code {
+
+	[Parameter]
+	public List<TData>? Items{ get; set; }
+
+	[Parameter]
+	public RenderFragment<TData>? Row{ get; set; }
+
+	[Parameter]
+	public RenderFragment? Header{ get; set; }
+
+	[Parameter]
+	public RenderFragment? Footer{ get; set; }
+
+}

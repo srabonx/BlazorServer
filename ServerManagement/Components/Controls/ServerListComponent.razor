@@ -2,22 +2,30 @@
 
 
 
-	<div class="col-8">
-		<ul>
-			<Virtualize Items="servers" Context="server">
+	<table class="table table-striped">
+		<RepeaterComponent Items="servers">
+			<Header>
+				<thead>
+					<th>Name</th>
+					<th>City</th>
+					<th>Status</th>
+					<th>People Online</th>
+					<th></th>
+				</thead>
+			</Header>
 
-				<ServerComponent server="server" DeleteServerCallback="DeleteServer"></ServerComponent>
+			<Row Context="server">
+			<ServerComponent server="server" DeleteServerCallback="DeleteServer"></ServerComponent>
+			</Row>
 
-			</Virtualize>
-		</ul>
+		</RepeaterComponent>
+	</table>
 
-		<p>
-			<NavLink class="nav-link" href="servers/add">
-				<button class="btn btn-primary">Add Server</button>
-			</NavLink>
-		</p>
-	</div>
-
+<div class="nav-item">
+	<NavLink class="nav-link" href="/servers/add">
+		<button class="btn btn-primary" aria-hidden="true"> Add Server</button>
+	</NavLink>
+</div>
 
 
 @code {

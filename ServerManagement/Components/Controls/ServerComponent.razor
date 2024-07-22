@@ -1,20 +1,53 @@
 ﻿
 @inject NavigationManager NavMan
 
-<li @key="server.ServerId">
-	<div class="row">
-		<div class="col-8">
-			@server.ServerName in @server.ServerCity is
-			<span style="color:@(server.IsOnline?"Green" : "Red")">
-				@(server.IsOnline ? "Online" : "Offline")
-			</span>
-			<a href="/servers/edit/@server.ServerId" class="btn btn-link">Edit</a>
-		</div>
-		<div class="col-4 text-center">
-			<button class="btn btn-primary m-2" type="submit" @onclick="@(() => {DeleteServer(server.ServerId);})">Delete</button>
-		</div>
-	</div>
-</li>
+
+
+@if(server != null)
+{
+	<tr class="mb-2" style="background-color:@GetBackgroundColor()">
+		<td>
+			@server.ServerName
+		</td>
+
+		<td>
+			@server.ServerCity
+		</td>
+
+		<td style="color:@((server.IsOnline? "green" : "red"))">
+			@(server.IsOnline ? "Online" : "Offline")
+		</td>
+
+		<td>
+			@if(server.IsOnline)
+			{
+				Random random = new Random();
+
+				<text>User: @random.Next(100) </text>
+			}
+			else
+			{
+				<text>N/A</text>
+			}
+		</td>
+
+		<td>
+			@if (server.IsOnline)
+			{
+				<button class="btn btn-outline-danger" @onclick="ToggleOnOff">Turn Off</button>
+			}
+			else
+			{
+				<button class="btn btn-outline-success" @onclick="ToggleOnOff">Turn On</button>
+			}
+			&nbsp;
+			<a href="/servers/edit/@server.ServerId" class="btn btn-outline-primary ms-2">Edit</a>
+			&nbsp;
+			<button class="btn btn-outline-danger" @onclick="@(() => {DeleteServer(server.ServerId);})">Delete</button>
+
+		</td>
+	</tr>
+}
 
 
 @code {
@@ -24,8 +57,31 @@
 	[Parameter]
 	public EventCallback<int> DeleteServerCallback{ get; set; }
 
+	[CascadingParameter(Name ="selectedCity")]
+	private string selectedCity{ get; set; }
+
 	private void DeleteServer(int serverId)
 	{
 		DeleteServerCallback.InvokeAsync(serverId);
+	}
+
+	private void ToggleOnOff()
+	{
+		server.IsOnline = !server.IsOnline;
+
+	}
+
+	private string GetBackgroundColor()
+	{
+		switch(selectedCity)
+		{
+			case "Toronto": return "powderblue";
+			case "Montreal": return "lightgray";
+			case "Ottawa": return "palegreen";
+			case "Calgary": return "pink";
+			case "Halifax": return "white";
+			default:
+				return "white";
+		}
 	}
 }
