@@ -17,7 +17,8 @@
 
 	private List<string>? cities = CityRepository.GetCities();
 
-	private string? FilterCity;
+	[Parameter]
+	public string? FilterCity { get; set; }
 
 	[Parameter]
 	public EventCallback<string> HandleFilterCityCallback{ get; set; }

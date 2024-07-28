@@ -1,11 +1,16 @@
 ﻿@page "/servers"
+@page "/servers/back_from/{cityName}"
+
+
 @rendermode InteractiveServer
+
+@inject NavigationManager NavigationManager
 
 <title>Servers</title>
 
 <h1>Servers</h1>
 
-<CityListComponent @ref="cityListComponent" HandleFilterCityCallback="HandleFilterCity"></CityListComponent>
+<CityListComponent @ref="cityListComponent" HandleFilterCityCallback="HandleFilterCity" FilterCity="@this.selectedCity"></CityListComponent>
 
 <br/>
 
@@ -30,6 +35,10 @@
 
 	private string selectedCity { get; set; }
 
+	[Parameter]
+	public string cityName { get; set; }
+
+
 	private CityListComponent? cityListComponent;
 
 	private SearchComponent? searchComponent;
@@ -46,6 +55,19 @@
 		selectedCity = city;
 		this.servers = ServerRepository.GetServersByCity(city);
 		searchComponent?.ClearFilter();
+	}
+
+	protected override void OnAfterRender(bool firstRender)
+	{
+		if(firstRender)
+		{
+			if(NavigationManager.Uri.Contains("back_from") && !string.IsNullOrWhiteSpace(cityName))
+			{
+				selectedCity = cityName;
+				HandleFilterCity(selectedCity);
+				StateHasChanged();
+			}
+		}
 	}
 
 }

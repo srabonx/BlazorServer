@@ -4,6 +4,13 @@
 
 @inject NavigationManager NavigationManager
 
+@inject IJSRuntime JSRuntime
+
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation"
+				ConfirmExternalNavigation = "true"> 
+
+</NavigationLock>
+
 <title>Edit-Server</title>
 
 <h3>Edit Server</h3>
@@ -73,7 +80,23 @@
 		if(server != null)
 		{
 			ServerRepository.UpdateServer(server.ServerId, server);
-			NavigationManager.NavigateTo("/servers");
+
+			NavigationManager.NavigateTo($"/servers/back_from/{this.server.ServerCity}");
 		}
 	}
+
+	private async Task OnBeforeInternalNavigation(LocationChangingContext lcc)
+	{
+		if (!lcc.TargetLocation.Equals($"/servers/back_from/{this.server.ServerCity}") && !lcc.TargetLocation.Equals("/servers"))
+		{
+			var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Changes you made may not be saved!");
+
+		
+			if(!confirmed)
+			{
+				lcc.PreventNavigation();
+			}
+		}
+	}
+
 }
