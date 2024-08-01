@@ -1,7 +1,7 @@
 ﻿
 
 <div class="col">
-	<div class="card m-3 align-content-center @(City.Equals(FilterCity,StringComparison.OrdinalIgnoreCase)?"border-primary":"")">
+	<div class="card m-3 align-content-center @(City != null ? City.Equals(FilterCity,StringComparison.OrdinalIgnoreCase)?"border-primary":"" : City = "")">
 		<img src="@($"/images/{City}.png")" class="card-img-top" alt="...">
 		<div class="card-body">
 			<button type="button" class="btn btn-primary" @onclick="@(() => {OnSelectCity(City);})">
@@ -14,9 +14,9 @@
 @code {
 
 	[Parameter]
-	public string City{ get; set; }
+	public string? City{ get; set; }
 	[Parameter]
-	public string FilterCity { get; set; }
+	public string? FilterCity { get; set; }
 
 
 	[Parameter]

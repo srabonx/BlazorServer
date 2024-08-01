@@ -3,6 +3,7 @@
 @rendermode InteractiveServer
 
 @inject NavigationManager NavigationManager
+@inject IServerEFRepository ServerEFRepository
 
 @inject IJSRuntime JSRuntime
 
@@ -72,14 +73,14 @@
 
 	protected override void OnParametersSet()
 	{
-		server ??= ServerRepository.GetServerById(this.Id);
+		server ??= ServerEFRepository.GetServerById(this.Id);
 	}
 
 	private void OnSubmit()
 	{
 		if(server != null)
 		{
-			ServerRepository.UpdateServer(server.ServerId, server);
+			ServerEFRepository.UpdateServer(server.ServerId, server);
 
 			NavigationManager.NavigateTo($"/servers/back_from/{this.server.ServerCity}");
 		}
@@ -87,16 +88,20 @@
 
 	private async Task OnBeforeInternalNavigation(LocationChangingContext lcc)
 	{
-		if (!lcc.TargetLocation.Equals($"/servers/back_from/{this.server.ServerCity}") && !lcc.TargetLocation.Equals("/servers"))
+		if(server is not null)
 		{
-			var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Changes you made may not be saved!");
-
-		
-			if(!confirmed)
+			if (!lcc.TargetLocation.Equals($"/servers/back_from/{this.server.ServerCity}") && !lcc.TargetLocation.Equals("/servers"))
 			{
-				lcc.PreventNavigation();
+				var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Changes you made may not be saved!");
+
+
+				if (!confirmed)
+				{
+					lcc.PreventNavigation();
+				}
 			}
 		}
+		
 	}
 
 }

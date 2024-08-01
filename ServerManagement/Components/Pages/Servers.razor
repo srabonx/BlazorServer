@@ -5,6 +5,7 @@
 @rendermode InteractiveServer
 
 @inject NavigationManager NavigationManager
+@inject IServerEFRepository ServerEFRepository
 
 <title>Servers</title>
 
@@ -31,17 +32,18 @@
 
 @code
 {
-	private List<Server> servers { get; set; } = ServerRepository.GetServers();
+	private List<Server>? servers;
 
-	private string selectedCity { get; set; }
+	private string? selectedCity { get; set; }
 
 	[Parameter]
-	public string cityName { get; set; }
+	public string? cityName { get; set; }
 
 
 	private CityListComponent? cityListComponent;
 
 	private SearchComponent? searchComponent;
+
 
 	private void HandleSearch(List<Server> servers)
 	{
@@ -53,7 +55,7 @@
 	private void HandleFilterCity(string city)
 	{
 		selectedCity = city;
-		this.servers = ServerRepository.GetServersByCity(city);
+		this.servers = ServerEFRepository.GetServersByCity(city);
 		searchComponent?.ClearFilter();
 	}
 
@@ -61,6 +63,8 @@
 	{
 		if(firstRender)
 		{
+			servers = ServerEFRepository.GetServers();
+
 			if(NavigationManager.Uri.Contains("back_from") && !string.IsNullOrWhiteSpace(cityName))
 			{
 				selectedCity = cityName;

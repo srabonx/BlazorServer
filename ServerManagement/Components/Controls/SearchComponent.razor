@@ -1,4 +1,4 @@
-﻿
+﻿@inject IServerEFRepository ServerEFRepository
 
 <div class="col-4">
 	<div class="input-group">
@@ -37,7 +37,7 @@
 
 	private void HandleSearch()
 	{
-		servers = ServerRepository.SearchServer(_filterServer);
+		servers = ServerEFRepository.SearchServer(_filterServer);
 
 		HandleSearchCallback.InvokeAsync(servers);
 	}

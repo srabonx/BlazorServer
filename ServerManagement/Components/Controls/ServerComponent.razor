@@ -1,6 +1,6 @@
 ﻿
 @inject NavigationManager NavMan
-
+@inject IServerEFRepository ServerEFRepository
 
 
 @if(server != null)
@@ -58,7 +58,7 @@
 	public EventCallback<int> DeleteServerCallback{ get; set; }
 
 	[CascadingParameter(Name ="selectedCity")]
-	private string selectedCity{ get; set; }
+	private string? selectedCity{ get; set; }
 
 	private void DeleteServer(int serverId)
 	{
@@ -67,7 +67,12 @@
 
 	private void ToggleOnOff()
 	{
-		server.IsOnline = !server.IsOnline;
+		if (server is not null)
+		{
+			server.IsOnline = !server.IsOnline;
+
+			ServerEFRepository.UpdateServer(server.ServerId, server);
+		}
 
 	}
 

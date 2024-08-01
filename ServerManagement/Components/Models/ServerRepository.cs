@@ -36,7 +36,7 @@ public static class ServerRepository
 
 	public static List<Server> GetServersByCity(string cityName)
 	{
-		return m_servers.Where(s => s.ServerCity.Equals(cityName, StringComparison.OrdinalIgnoreCase)).ToList();
+		return m_servers.Where(s => s.ServerCity != null && s.ServerCity.Equals(cityName, StringComparison.OrdinalIgnoreCase)).ToList();
 	}
 
 	public static Server? GetServerById(int id)
@@ -80,7 +80,7 @@ public static class ServerRepository
 
 	public static List<Server> SearchServer(string serverFilter)
 	{
-		var servers = m_servers.Where(s => s.ServerName.Contains(serverFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+		var servers = m_servers.Where(s => s.ServerName != null && s.ServerName.Contains(serverFilter, StringComparison.OrdinalIgnoreCase)).ToList();
 
 		return servers;
 	}

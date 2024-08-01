@@ -3,6 +3,7 @@
 @rendermode InteractiveServer
 
 @inject NavigationManager NavigationManager
+@inject IServerEFRepository ServerEFRepository
 
 <title>Add Server</title>
 
@@ -10,52 +11,56 @@
 
 <br/>
 
-<div>
-	<EditForm Model="server" OnValidSubmit="OnSubmit">
-		<DataAnnotationsValidator></DataAnnotationsValidator>
-		<!--Field for Server Name-->
-		<div class="row mb-3">
-			<div class="col-2">
-				<label class="col-form-label">Name</label>
+@if(server != null)
+{
+	<div>
+		<EditForm Model="server" OnValidSubmit="OnSubmit">
+			<DataAnnotationsValidator></DataAnnotationsValidator>
+			<!--Field for Server Name-->
+			<div class="row mb-3">
+				<div class="col-2">
+					<label class="col-form-label">Name</label>
+				</div>
+				<div class="col-6">
+					<InputText @bind-Value="server.ServerName" class="form-control"></InputText>
+				</div>
+				<div class="col">
+					<ValidationMessage For="() => server.ServerName"></ValidationMessage>
+				</div>
 			</div>
-			<div class="col-6">
-				<InputText @bind-Value="server.ServerName" class="form-control"></InputText>
-			</div>
-			<div class="col">
-				<ValidationMessage For="() => server.ServerName"></ValidationMessage>
-			</div>
-		</div>
 
-		<!--Field for Server City-->
-		<div class="row mb-3">
-			<div class="col-2">
-				<label class="col-form-label">City</label>
+			<!--Field for Server City-->
+			<div class="row mb-3">
+				<div class="col-2">
+					<label class="col-form-label">City</label>
+				</div>
+				<div class="col-6">
+					<InputText @bind-Value="server.ServerCity" class="form-control"></InputText>
+				</div>
+				<div class="col">
+					<ValidationMessage For="() => server.ServerCity"></ValidationMessage>
+				</div>
 			</div>
-			<div class="col-6">
-				<InputText @bind-Value="server.ServerCity" class="form-control"></InputText>
+
+			<!--Field for making the server online or offline-->
+			<div class="row mb-3">
+				<div class="col-2">
+					<label class="col-form-label">Online</label>
+				</div>
+				<div class="col-6">
+					<InputCheckbox @bind-Value="server.IsOnline" class="form-check"></InputCheckbox>
+				</div>
 			</div>
-			<div class="col">
-				<ValidationMessage For="() => server.ServerCity"></ValidationMessage>
-			</div>
-		</div>
 
-		<!--Field for making the server online or offline-->
-		<div class="row mb-3">
-			<div class="col-2">
-				<label class="col-form-label">Online</label>
-			</div>
-			<div class="col-6">
-				<InputCheckbox @bind-Value="server.IsOnline" class="form-check"></InputCheckbox>
-			</div>
-		</div>
+			<br />
 
-		<br/>
+			<button class="btn btn-primary" type="submit">Save</button>
 
-		<button class="btn btn-primary" type="submit">Save</button>
+		</EditForm>
 
-	</EditForm>
+	</div>
+}
 
-</div>
 
 @code
 {
@@ -65,7 +70,7 @@
 	{
 		if(server != null)
 		{
-			ServerRepository.AddServer(server);
+			ServerEFRepository.AddServer(server);
 
 			NavigationManager.NavigateTo($"/servers/back_from/{this.server.ServerCity}");
 		}

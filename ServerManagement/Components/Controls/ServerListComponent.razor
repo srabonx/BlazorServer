@@ -1,4 +1,4 @@
-﻿
+﻿@inject IServerEFRepository ServerEFRepository
 
 	<table class="table table-striped">
 		<RepeaterComponent Items="servers">
@@ -35,7 +35,7 @@
 	{
 		if (serverId > 0)
 		{
-			ServerRepository.DeleteServer(serverId);
+			ServerEFRepository.DeleteServer(serverId);
 		}
 	}
 }
