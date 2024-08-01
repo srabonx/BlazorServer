@@ -11,8 +11,14 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 // Add Database Context
 builder.Services.AddDbContextFactory<ServerManagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("BlazorServerManagement")));
+builder.Services.AddHttpClient("ServersApi", client =>
+{
+    client.BaseAddress = new Uri("https://testdb-c6320-default-rtdb.asia-southeast1.firebasedatabase.app/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
 
 builder.Services.AddTransient<IServerEFRepository, ServerEFRepository>();
+builder.Services.AddTransient<IServerAPIRepository, ServerAPIRepository>();
 
 var app = builder.Build();
 

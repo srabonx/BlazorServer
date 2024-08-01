@@ -1,4 +1,5 @@
 ﻿@inject IServerEFRepository ServerEFRepository
+@inject IServerAPIRepository ServerAPIRepository
 
 	<table class="table table-striped">
 		<RepeaterComponent Items="servers">
@@ -31,11 +32,12 @@
 	[Parameter]
 	public List<Server>? servers{ get; set; }
 
-	private void DeleteServer(int serverId)
+	private async Task DeleteServer(int serverId)
 	{
 		if (serverId > 0)
 		{
-			ServerEFRepository.DeleteServer(serverId);
+			await ServerAPIRepository.DeleteServerAsync(serverId);
+			StateHasChanged();
 		}
 	}
 }

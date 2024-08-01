@@ -6,6 +6,7 @@
 
 @inject NavigationManager NavigationManager
 @inject IServerEFRepository ServerEFRepository
+@inject IServerAPIRepository ServerAPIRepository
 
 <title>Servers</title>
 
@@ -52,18 +53,19 @@
 		cityListComponent?.ClearFilter();
 	}
 
-	private void HandleFilterCity(string city)
+	private async void HandleFilterCity(string city)
 	{
 		selectedCity = city;
-		this.servers = ServerEFRepository.GetServersByCity(city);
+		this.servers = await ServerAPIRepository.GetServerByCityAsync(city);
 		searchComponent?.ClearFilter();
+		StateHasChanged();
 	}
 
-	protected override void OnAfterRender(bool firstRender)
+	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if(firstRender)
 		{
-			servers = ServerEFRepository.GetServers();
+			servers = await ServerAPIRepository.GetServersAsync();
 
 			if(NavigationManager.Uri.Contains("back_from") && !string.IsNullOrWhiteSpace(cityName))
 			{
@@ -71,6 +73,8 @@
 				HandleFilterCity(selectedCity);
 				StateHasChanged();
 			}
+
+			StateHasChanged();
 		}
 	}
 

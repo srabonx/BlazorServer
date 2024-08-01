@@ -1,6 +1,7 @@
 ﻿
 @inject NavigationManager NavMan
 @inject IServerEFRepository ServerEFRepository
+@inject IServerAPIRepository ServerAPIRepository
 
 
 @if(server != null)
@@ -65,13 +66,13 @@
 		DeleteServerCallback.InvokeAsync(serverId);
 	}
 
-	private void ToggleOnOff()
+	private async void ToggleOnOff()
 	{
 		if (server is not null)
 		{
 			server.IsOnline = !server.IsOnline;
 
-			ServerEFRepository.UpdateServer(server.ServerId, server);
+			await ServerAPIRepository.UpdateServerAsync(server.ServerId, server);
 		}
 
 	}

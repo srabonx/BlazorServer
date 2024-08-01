@@ -4,6 +4,7 @@
 
 @inject NavigationManager NavigationManager
 @inject IServerEFRepository ServerEFRepository
+@inject IServerAPIRepository ServerAPIRepository
 
 @inject IJSRuntime JSRuntime
 
@@ -71,16 +72,16 @@
 
 	Server? server { get; set; }
 
-	protected override void OnParametersSet()
+	protected override async Task OnParametersSetAsync()
 	{
-		server ??= ServerEFRepository.GetServerById(this.Id);
+		server ??= await ServerAPIRepository.GetServerByIdAsync(this.Id);
 	}
 
-	private void OnSubmit()
+	private async Task OnSubmit()
 	{
 		if(server != null)
 		{
-			ServerEFRepository.UpdateServer(server.ServerId, server);
+			await ServerAPIRepository.UpdateServerAsync(server.ServerId, server);
 
 			NavigationManager.NavigateTo($"/servers/back_from/{this.server.ServerCity}");
 		}

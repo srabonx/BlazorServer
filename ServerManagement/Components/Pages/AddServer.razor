@@ -4,6 +4,7 @@
 
 @inject NavigationManager NavigationManager
 @inject IServerEFRepository ServerEFRepository
+@inject IServerAPIRepository ServerAPIRepository
 
 <title>Add Server</title>
 
@@ -66,11 +67,11 @@
 {
 	private Server? server { get; set; } = new Server { IsOnline = false };
 
-	private void OnSubmit()
+	private async Task OnSubmit()
 	{
 		if(server != null)
 		{
-			ServerEFRepository.AddServer(server);
+			await ServerAPIRepository.AddServerAsync(server);
 
 			NavigationManager.NavigateTo($"/servers/back_from/{this.server.ServerCity}");
 		}

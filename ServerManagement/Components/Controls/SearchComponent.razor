@@ -1,4 +1,5 @@
 ﻿@inject IServerEFRepository ServerEFRepository
+@inject IServerAPIRepository ServerAPIRepository
 
 <div class="col-4">
 	<div class="input-group">
@@ -35,11 +36,11 @@
 	[Parameter]
 	public EventCallback<List<Server>> HandleSearchCallback{ get; set; }
 
-	private void HandleSearch()
+	private async Task HandleSearch()
 	{
-		servers = ServerEFRepository.SearchServer(_filterServer);
+		servers = await ServerAPIRepository.SearchServerAsync(_filterServer);
 
-		HandleSearchCallback.InvokeAsync(servers);
+		await HandleSearchCallback.InvokeAsync(servers);
 	}
 
 }
